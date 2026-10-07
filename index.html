@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" id="html-root">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAFÉ LÁ LUSH | קפה ללוש בראסרי אשדוד - אתר כשר למהדרין</title>
+    <link rel="stylesheet" href="StyleSheet1.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+
+    <!-- ייבוא ספריית PapaParse לקריאת נתונים מגוגל שיטס -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+</head>
+<body>
+
+    <div id="reading-guide-bar"></div>
+
+    <button class="accessibility-toggle-btn" onclick="toggleAccessibilityModal()" aria-label="תפריט נגישות">accessibility</button>
+
+    <div class="accessibility-modal" id="accessibilityModal" role="dialog" aria-modal="true" aria-label="תפריט נגישות">
+        <div class="accessibility-header">
+            <button class="accessibility-reset" onclick="resetAccessibility()" title="איפוס נגישות">🔄</button>
+            <h3 style="margin:0; font-size:18px;">Accessibility Options</h3>
+            <button class="accessibility-close" onclick="toggleAccessibilityModal()" aria-label="סגור תפריט">✕</button>
+        </div>
+        <div class="accessibility-body">
+            <button class="acc-btn" onclick="adjustTextSize(1)"><span class="icon">🔍+</span> increase text size</button>
+            <button class="acc-btn" onclick="adjustTextSize(-1)"><span class="icon">🔍-</span> decrease text size</button>
+            <button class="acc-btn" onclick="adjustTextSpacing(1)"><span class="icon">↔</span> increase text spacing</button>
+            <button class="acc-btn" onclick="adjustTextSpacing(-1)"><span class="icon">⇄</span> decrease text spacing</button>
+            <button class="acc-btn" onclick="toggleInvertColors()"><span class="icon">💧</span> invert colors</button>
+            <button class="acc-btn" onclick="toggleGrayscale()"><span class="icon">👁‍🗨️</span> gray hues</button>
+            <button class="acc-btn" onclick="toggleUnderlineLinks()"><span class="icon"><u>U</u></span> underline links</button>
+            <button class="acc-btn" onclick="toggleBigCursor()"><span class="icon">🖱️</span> big cursor</button>
+            <button class="acc-btn" onclick="toggleReadingGuide()"><span class="icon">📑</span> reading guide</button>
+            <button class="acc-btn" onclick="textToSpeech()"><span class="icon">🔊</span> text to speech</button>
+            <button class="acc-btn" onclick="speechToText()"><span class="icon">🎤</span> speech to text</button>
+        </div>
+    </div>
+
+    <!-- בורר שפות מעוצב (שמאל) -->
+    <div class="language-selector-container">
+        <select id="languageSelect" onchange="changeLanguage(this.value)" aria-label="בחירת שפה">
+            <option value="he" selected>עברית (HE)</option>
+            <option value="en">English (EN)</option>
+            <option value="fr">Français (FR)</option>
+            <option value="ru">Русский (RU)</option>
+        </select>
+    </div>
+
+    <!-- כפתור חזרה צף לתפריט הבחירה -->
+    <a href="#quick-menu-section" class="floating-home-btn" title="חזרה לתפריט הבחירה">
+        <span>🏠</span>
+        <span data-i18n="quick_menu_btn">תפריט בחירה</span>
+    </a>
+
+    <!-- כותרת ראשית -->
+    <header>
+        <div class="container navbar-top">
+            <div class="brand">
+                <h1 class="logo-en">CAFÉ <span>LÁ</span> LUSH</h1>
+                <span class="logo-sub" data-i18n="brand_sub">BRASSERIE • קפה ללוש כשר אשדוד</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- באנר ראשי -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="badge" data-i18n="hero_badge">BRASSERIE • כשר למהדרין אשדוד</div>
+            <h2 data-i18n="hero_title">חוויה קולינרית עשירה</h2>
+            <p data-i18n="hero_desc">בראסרי חלבי כשר: מאפי טאבון, פסטות עבודת יד, דגים טריים, קוקטיילים וקינוחי שף מובחרים.</p>
+            <a href="#quick-menu-section" class="btn" data-i18n="hero_btn">לבחירת מחלקה בתפריט</a>
+        </div>
+    </section>
+
+    <!-- תפריט ניווט מהיר -->
+    <section id="quick-menu-section" class="container nav-boxes-section">
+        <div class="section-title">
+            <span class="sub-heading" data-i18n="quick_menu_sub">QUICK MENU</span>
+            <h2 data-i18n="quick_menu_heading">תפריט הניווט במסעדה</h2>
+            <div class="divider"></div>
+        </div>
+
+        <div class="nav-boxes-container">
+            <a href="#menu-taboon" class="nav-box-row" style="background-image: linear-gradient(to right, rgba(11, 37, 69, 0.5), rgba(11, 37, 69, 0.3)), url('lphotos/pizza.jpg');">
+                <span class="box-title" data-i18n="cat_taboon">בצקים מהטאבון</span>
+            </a>
+            <a href="#menu-toasts" class="nav-box-row" style="background-image: linear-gradient(to right, rgba(11, 37, 69, 0.5), rgba(11, 37, 69, 0.3)), url('lphotos/lalushbelechem.jpg');">
+                <span class="box-title" data-i18n="cat_toasts">ללוש בלחם</span>
+            </a>
+            <a href="#menu-brunch" class="nav-box-row" style="background-image: linear-gradient(to right, rgba(11, 37, 69, 0.5), rgba(11, 37, 69, 0.3)), url('lphotos/bokermeuchar.jpg');">
+                <span class="box-title" data-i18n="cat_brunch">בוקר מאוחר</span>
+            </a>
+            <a href="#menu-starters" class="nav-box-row" style="background-image: linear-gradient(to right, rgba(11, 37, 69, 0.5), rgba(11, 37, 69, 0.3)), url('lphotos/rishonot.jpg');">
+                <span class="box-title" data-i18n="cat_starters">ראשונות</span>
+            </a>
+            <a href="#menu-salads" class="nav-box-row" style="background-image: linear-gradient(to right, rgba(11, 37, 69, 0.5), rgba(11, 37, 69, 0.3)), url('lphotos/salatim.jpg');">
+                <span class="box-title" data-i18n="cat_salads">סלטים</span>
+            </a>
+            <a href="#menu-pasta" class="nav-box-row" style="background-image: linear-gradient(to right, rgba(11, 37, 69, 0.5), rgba(11, 37, 69, 0.3)), url('lphotos/meerertzhamagaf.jpg');">
+                <span class="box-title" data-i18n="cat_pasta">מארץ המגף</span>
+            </a>
+            <a href="#menu-fish" class="nav-box-row" style="background-image: linear-gradient(to right, rgba(11, 37, 69, 0.5), rgba(11, 37, 69, 0.3)), url('lphotos/fish.jpg');">
+                <span class="box-title" data-i18n="cat_fish">דגים</span>
+            </a>
+            <a href="#menu-desserts" class="nav-box-row" style="background-image: linear-gradient(to right, rgba(11, 37, 69, 0.5), rgba(11, 37, 69, 0.3)), url('lphotos/desert.jpeg');">
+                <span class="box-title" data-i18n="cat_desserts">הקינוחים שלנו</span>
+            </a>
+            <a href="#menu-drinks" class="nav-box-row" style="background-image: linear-gradient(to right, rgba(11, 37, 69, 0.5), rgba(11, 37, 69, 0.3)), url('https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?q=80&w=1200');">
+                <span class="box-title" data-i18n="cat_drinks">שתייה קלה ומשקאות</span>
+            </a>
+            <a href="#menu-alcohol" class="nav-box-row" style="background-image: linear-gradient(to right, rgba(11, 37, 69, 0.5), rgba(11, 37, 69, 0.3)), url('https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=1200');">
+                <span class="box-title" data-i18n="cat_alcohol">אלכוהול ויינות</span>
+            </a>
+            <a href="#menu-cocktails" class="nav-box-row" style="background-image: linear-gradient(to right, rgba(11, 37, 69, 0.5), rgba(11, 37, 69, 0.3)), url('lphotos/cocktilim.jpg');">
+                <span class="box-title" data-i18n="cat_cocktails">קוקטיילים</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- מחלקות התפריט המקוריות -->
+    <section id="menu-taboon" class="menu-section"><div class="container section"><div class="section-title"><span class="sub-heading">STONE OVEN</span><h2 data-i18n="cat_taboon">בצקים מהטאבון</h2><p class="category-note" data-i18n="note_taboon">בצק טרי מדי יום</p><div class="divider"></div></div><div class="menu-grid" id="grid-taboon"></div></div></section>
+    <section id="menu-toasts" class="menu-section"><div class="container section"><div class="section-title"><span class="sub-heading">TOASTS & SANDWICHES</span><h2 data-i18n="cat_toasts">ללוש בלחם</h2><p class="category-note" data-i18n="note_toasts">טוסטים עשויים בלחם קסטן. מוגש עם סלט ירקות טרי ואיולי פסטו</p><div class="divider"></div></div><div class="menu-grid" id="grid-toasts"></div></div></section>
+    <section id="menu-brunch" class="menu-section"><div class="container section"><div class="section-title"><span class="sub-heading">LATE BRUNCH</span><h2 data-i18n="cat_brunch">בוקר מאוחר</h2><div class="divider"></div></div><div class="menu-grid" id="grid-brunch"></div></div></section>
+    
+    <section id="menu-starters" class="menu-section">
+        <div class="container section">
+            <div class="section-title">
+                <span class="sub-heading">APPETIZERS</span>
+                <h2 data-i18n="cat_starters">ראשונות</h2>
+                <div class="divider"></div>
+            </div>
+            <div class="menu-grid" id="grid-starters"></div>
+        </div>
+    </section>
+
+    <section id="menu-salads" class="menu-section"><div class="container section"><div class="section-title"><span class="sub-heading">FRESH SALADS</span><h2 data-i18n="cat_salads">סלטים</h2><p class="category-note" data-i18n="note_salads">מוגש עם מקל פוקאצ'ה פרמז'ן</p><div class="divider"></div></div><div class="menu-grid" id="grid-salads"></div></div></section>
+    <section id="menu-pasta" class="menu-section"><div class="container section"><div class="section-title"><span class="sub-heading">FRESH PASTA</span><h2 data-i18n="cat_pasta">מארץ המגף</h2><p class="category-note" data-i18n="note_pasta">פסטה טרייה | הפסטות מוגשות עם פרמז'ן</p><div class="divider"></div></div><div class="menu-grid" id="grid-pasta"></div></div></section>
+    <section id="menu-fish" class="menu-section"><div class="container section"><div class="section-title"><span class="sub-heading">FRESH FISH</span><h2 data-i18n="cat_fish">דגים</h2><p class="category-note" data-i18n="note_fish">דגה טרייה</p><div class="divider"></div></div><div class="menu-grid" id="grid-fish"></div></div></section>
+    <section id="menu-desserts" class="menu-section"><div class="container section"><div class="section-title"><span class="sub-heading">DESSERTS</span><h2 data-i18n="cat_desserts">הקינוחים שלנו</h2><div class="divider"></div></div><div class="menu-grid" id="grid-desserts"></div></div></section>
+    
+    <section id="menu-drinks" class="menu-section">
+        <div class="container section">
+            <div class="section-title"><span class="sub-heading">BEVERAGES</span><h2 data-i18n="cat_drinks">שתייה קלה ומשקאות</h2><div class="divider"></div></div>
+            <h3 class="category-header" data-i18n="sub_hot">שתייה חמה וקפה</h3><div class="menu-grid" id="grid-hot-drinks"></div>
+            <h3 class="category-header" data-i18n="sub_special">ספיישללוש, קפה ומאפה</h3><div class="menu-grid" id="grid-special-drinks"></div>
+            <h3 class="category-header" data-i18n="sub_ice">אייסים וסחוט טרי</h3><div class="menu-grid" id="grid-ice-drinks"></div>
+            <h3 class="category-header" data-i18n="sub_cold">משקאות קרים ושייקים</h3><div class="menu-grid" id="grid-cold-drinks"></div>
+        </div>
+    </section>
+
+    <section id="menu-alcohol" class="menu-section"><div class="container section"><div class="section-title"><span class="sub-heading">WINE & ALCOHOL</span><h2 data-i18n="cat_alcohol">אלכוהול ויינות</h2><p class="category-note" data-i18n="note_alcohol">של משקאות משכרים למי שטרם מלאו לו 18 שנה אסורה מכירה ו/או הגשה</p><div class="divider"></div></div><div class="menu-grid" id="grid-alcohol"></div></div></section>
+    
+    <section id="menu-cocktails" class="menu-section cocktails-bg">
+        <div class="container section">
+            <div class="section-title"><span class="sub-heading">SIGNATURE COCKTAILS</span><h2 data-i18n="cat_cocktails">קוקטיילים</h2><div class="divider"></div><p class="cocktail-note" data-i18n="note_cocktails">כל הקוקטיילים <strong>₪48</strong></p></div>
+            <div class="menu-grid" id="grid-cocktails"></div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p class="footer-logo">CAFÉ LÁ LUSH BRASSERIE ASHDOD</p>
+            <p data-i18n="footer_copy">© 2026 קפה ללוש בראסרי • כל הזכויות שמורות</p>
+        </div>
+    </footer>
+
+    <!-- סקריפט לניהול תרגומים, נתונים ופונקציות נגישות מתקדמות -->
+    <script>
+        const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRVJzAWTtbFvvVGmEDOl-ibj56ZsO6JyZnQEMG88f_rzGiWijT41XSpF_ko9f4ucWA179DJqmnjCU9e/pub?output=csv';
+
+        const categoryMap = {
+            "בצקים בטאבון": "grid-taboon",
+            "טוסטים וכריכים": "grid-toasts",
+            "בוקר מאוחר": "grid-brunch",
+            "ראשונות": "grid-starters",
+            "סלטים": "grid-salads",
+            "פסטות": "grid-pasta",
+            "דגים": "grid-fish",
+            "קינוחים": "grid-desserts",
+            "מאפים": "grid-desserts",
+            "שתייה חמה": "grid-hot-drinks",
+            "משקאות מיוחדים": "grid-special-drinks",
+            "דילים": "grid-special-drinks",
+            "אייסים וסחוטים": "grid-ice-drinks",
+            "שתייה קלה": "grid-cold-drinks",
+            "שייקים": "grid-cold-drinks",
+            "קוקטיילים": "grid-cocktails",
+            "בירות בבקבוק": "grid-alcohol",
+            "בירות חבית": "grid-alcohol",
+            "וודקה": "grid-alcohol",
+            "רום": "grid-alcohol",
+            "אניס": "grid-alcohol",
+            "וויסקי": "grid-alcohol",
+            "טקילה": "grid-alcohol",
+            "ליקר": "grid-alcohol",
+            "יין מבעבע": "grid-alcohol",
+            "יין רוזה": "grid-alcohol",
+            "יין לבן": "grid-alcohol",
+            "יין אדום": "grid-alcohol"
+        };
+
+        const translations = {
+            he: {
+                quick_menu_btn: "תפריט בחירה",
+                quick_menu_sub: "QUICK MENU",
+                quick_menu_heading: "תפריט הניווט במסעדה",
+                brand_sub: "BRASSERIE • קפה ללוש כשר אשדוד",
+                hero_badge: "BRASSERIE • כשר למהדרין אשדוד",
+                hero_title: "חוויה קולינרית עשירה",
+                hero_desc: "בראסרי חלבי כשר: מאפי טאבון, פסטות עבודת יד, דגים טריים, קוקטיילים וקינוחי שף מובחרים.",
+                hero_btn: "לבחירת מחלקה בתפריט",
+                
+                cat_taboon: "בצקים מהטאבון",
+                note_taboon: "בצק טרי מדי יום",
+                cat_toasts: "ללוש בלחם",
+                note_toasts: "טוסטים עשויים בלחם קסטן. מוגש עם סלט ירקות טרי ואיולי פסטו",
+                cat_brunch: "בוקר מאוחר",
+                cat_starters: "ראשונות",
+                cat_salads: "סלטים",
+                note_salads: "מוגש עם מקל פוקאצ'ה פרמז'ן",
+                cat_pasta: "מארץ המגף",
+                note_pasta: "פסטה טרייה | הפסטות מוגשות עם פרמז'ן",
+                cat_fish: "דגים",
+                note_fish: "דגה טרייה",
+                cat_desserts: "הקינוחים שלנו",
+                cat_drinks: "שתייה קלה ומשקאות",
+                sub_hot: "שתייה חמה וקפה",
+                sub_special: "ספיישללוש, קפה ומאפה",
+                sub_ice: "אייסים וסחוט טרי",
+                sub_cold: "משקאות קרים ושייקים",
+                cat_alcohol: "אלכוהול ויינות",
+                note_alcohol: "של משקאות משכרים למי שטרם מלאו לו 18 שנה אסורה מכירה ו/או הגשה",
+                cat_cocktails: "קוקטיילים",
+                note_cocktails: "כל הקוקטיילים <strong>₪48</strong>",
+                footer_copy: "© 2026 קפה ללוש בראסרי • כל הזכויות שמורות"
+            },
+            en: {
+                quick_menu_btn: "Menu Categories",
+                quick_menu_sub: "QUICK MENU",
+                quick_menu_heading: "Restaurant Navigation Menu",
+                brand_sub: "BRASSERIE • CAFÉ LÁ LUSH KOSHER ASHDOD",
+                hero_badge: "BRASSERIE • STRICTLY KOSHER ASHDOD",
+                hero_title: "A Rich Culinary Experience",
+                hero_desc: "Kosher dairy brasserie: stone-oven pastries, handmade pastas, fresh fish, cocktails, and select chef desserts.",
+                hero_btn: "Choose Menu Category",
+                
+                cat_taboon: "Stone Oven Pastries",
+                note_taboon: "Fresh dough made daily",
+                cat_toasts: "Lalush in Bread",
+                note_toasts: "Toasts made with castan bread. Served with fresh vegetable salad and pesto aioli",
+                cat_brunch: "Late Brunch",
+                cat_starters: "Appetizers",
+                cat_salads: "Salads",
+                note_salads: "Served with parmesan focaccia stick",
+                cat_pasta: "From the Boot",
+                note_pasta: "Fresh pasta | Served with parmesan",
+                cat_fish: "Fish",
+                note_fish: "Fresh catch",
+                cat_desserts: "Our Desserts",
+                cat_drinks: "Beverages & Drinks",
+                sub_hot: "Hot Drinks & Coffee",
+                sub_special: "Special Lalush, Coffee & Pastry",
+                sub_ice: "Iced Drinks & Fresh Squeezed",
+                sub_cold: "Cold Drinks & Smoothies",
+                cat_alcohol: "Wine & Alcohol",
+                note_alcohol: "The sale and/or serving of alcoholic beverages to anyone under 18 is prohibited",
+                cat_cocktails: "Cocktails",
+                note_cocktails: "All cocktails <strong>₪48</strong>",
+                footer_copy: "© 2026 CAFÉ LÁ LUSH BRASSERIE • All Rights Reserved"
+            },
+            fr: {
+                quick_menu_btn: "Catégories",
+                quick_menu_sub: "QUICK MENU",
+                quick_menu_heading: "Menu de Navigation",
+                brand_sub: "BRASSERIE • CAFÉ LÁ LUSH CASHER ASHDOD",
+                hero_badge: "BRASSERIE • CASHER LEMEHADRIN ASHDOD",
+                hero_title: "Une Riche Expérience Culinaire",
+                hero_desc: "pâtisseries au four, poissons frais, cocktails et desserts de chef.",
+                hero_btn: "Choisir une catégorie",
+                
+                cat_taboon: "Pâtisseries au four",
+                note_taboon: "Pâte fraîche tous les jours",
+                cat_toasts: "Toasts & Sandwichs",
+                note_toasts: "Toasts préparés dans du pain castan. Servi avec salade et aïoli au pesto",
+                cat_brunch: "Brunch Tardif",
+                cat_starters: "Entrées",
+                cat_salads: "Salades",
+                note_salads: "Servi avec bâtonnet de focaccia au parmesan",
+                cat_pasta: "Pâtes Fraîches",
+                note_pasta: "Pâtes fraîches | Servies avec du parmesan",
+                cat_fish: "Poissons",
+                note_fish: "Poisson frais du jour",
+                cat_desserts: "Nos Desserts",
+                cat_drinks: "Boissons",
+                sub_hot: "Boissons Chaudes & Café",
+                sub_special: "Spécialités Lalush, Café & Pâtisserie",
+                sub_ice: "Boissons Glacées & Jus Frais",
+                sub_cold: "Boissons Froides & Smoothies",
+                cat_alcohol: "Vin & Alcool",
+                note_alcohol: "La vente et/ou le service de boissons alcoolisées aux mineurs de moins de 18 ans sont interdits",
+                cat_cocktails: "Cocktails",
+                note_cocktails: "Tous les cocktails <strong>₪48</strong>",
+                footer_copy: "© 2026 CAFÉ LÁ LUSH BRASSERIE • Tous droits réservés"
+            },
+            ru: {
+                quick_menu_btn: "Меню",
+                quick_menu_sub: "QUICK MENU",
+                quick_menu_heading: "Навигационное меню ресторана",
+                brand_sub: "БРАССЕРИ • КАФЕ ЛА ЛУШ КОШЕР АШДОД",
+                hero_badge: "БРАССЕРИ • СТРОГО КОШЕРНО АШДОД",
+                hero_title: "Богатый кулинарный опыт",
+                hero_desc: "Кошерная молочная брассери: выпечка из печи, паста ручной работы, свежая рыба, коктейли и десерты от шеф-повара.",
+                hero_btn: "Выбрать категорию меню",
+                
+                cat_taboon: "Из дровяной печи",
+                note_taboon: "Свежее тесто каждый день",
+                cat_toasts: "Тосты и сэндвичи",
+                note_toasts: "Тосты из хлеба кастан. Подается со свежим овощным салатом и соусом песто айоли",
+                cat_brunch: "Поздний завтрак",
+                cat_starters: "Закуски",
+                cat_salads: "Салаты",
+                note_salads: "Подается с палочкой фокаччи с пармезаном",
+                cat_pasta: "Свежая паста",
+                note_pasta: "Свежая паста | Подается с пармезаном",
+                cat_fish: "Рыба",
+                note_fish: "Свежий улов",
+                cat_desserts: "Наши десерты",
+                cat_drinks: "Напитки",
+                sub_hot: "Горячие напитки и кофе",
+                sub_special: "Спец. Лалуш, кофе и выпечка",
+                sub_ice: "Айс-напитки и свежевыжатые соки",
+                sub_cold: "Холодные напитки и שייקים",
+                cat_alcohol: "Вино и алкоголь",
+                note_alcohol: "Продажа и/или подача алкогольных напитков лицам младше 18 лет запрещена",
+                cat_cocktails: "Коктейли",
+                note_cocktails: "Все коктейли <strong>₪48</strong>",
+                footer_copy: "© 2026 КАФЕ ЛА ЛУШ БРАССЕРИ • Все права защищены"
+            }
+        };
+
+        let globalMenuData = [];
+
+        Papa.parse(csvUrl, {
+            download: true,
+            header: true,
+            complete: function(results) {
+                globalMenuData = results.data;
+                renderMenuItems(globalMenuData, 'he');
+            }
+        });
+
+        function updateStaticTexts(lang) {
+            const t = translations[lang];
+            if (!t) return;
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[key] !== undefined) {
+                    el.innerHTML = t[key];
+                }
+            });
+        }
+
+        function renderMenuItems(items, lang) {
+            Object.values(categoryMap).forEach(gridId => {
+                const el = document.getElementById(gridId);
+                if (el) el.innerHTML = '';
+            });
+
+            let nameKey = "שם פריט (עברית)";
+            let descKey = "תיאור (עברית)";
+
+            if (lang === 'en') {
+                nameKey = "שם פריט (English)";
+                descKey = "תיאור (English)";
+            } else if (lang === 'fr') {
+                nameKey = "שם פריט (Français)";
+                descKey = "תיאור (Français)";
+            } else if (lang === 'ru') {
+                nameKey = "שם פריט (Русский)";
+                descKey = "תיאור (Русский)";
+            }
+
+            items.forEach(item => {
+                const category = item["קטגוריה"];
+                if (!category) return;
+
+                const targetGridId = categoryMap[category.trim()];
+                if (!targetGridId) return;
+
+                const gridElement = document.getElementById(targetGridId);
+                if (!gridElement) return;
+
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'menu-item';
+
+                if (targetGridId === 'grid-cocktails') {
+                    itemDiv.classList.add('cocktail-card');
+                }
+
+                let priceHtml = '';
+                if (item["מחיר (₪)"]) {
+                    let priceVal = item["מחיר (₪)"];
+                    let displayPrice = priceVal.includes('₪') ? priceVal : '₪' + priceVal;
+                    priceHtml = `<span class="price">${displayPrice}</span>`;
+                }
+
+                let descHtml = '';
+                let itemDesc = item[descKey];
+                
+                if (lang === 'fr' && itemDesc) {
+                    itemDesc = itemDesc.replace(/tahini/g, 'tachina');
+                }
+
+                if (itemDesc && itemDesc.trim() !== "") {
+                    descHtml = `<p>${itemDesc}</p>`;
+                } else if (targetGridId === 'grid-alcohol') {
+                    descHtml = `<p style="font-size: 0.9em; color: var(--text-muted);">${category}</p>`;
+                }
+
+                let itemName = item[nameKey] || item["שם פריט (עברית)"] || "ללא שם";
+
+                if (lang === 'fr' && (itemName === 'Focaccia Formaggio' || itemName.includes('Formaggio'))) {
+                    itemName = 'Focaccia Parmesan';
+                }
+
+                // סדר הצגת הפרטים: שם המנה למעלה, מתחתיו התיאור, ומתחתיו המחיר
+                itemDiv.innerHTML = `
+                    <h4>${itemName}</h4>
+                    ${descHtml}
+                    ${priceHtml}
+                `;
+
+                gridElement.appendChild(itemDiv);
+            });
+        }
+
+        function changeLanguage(lang) {
+            const htmlRoot = document.getElementById('html-root');
+            if (lang === 'he') {
+                htmlRoot.setAttribute('dir', 'rtl');
+                htmlRoot.setAttribute('lang', 'he');
+            } else {
+                htmlRoot.setAttribute('dir', 'ltr');
+                htmlRoot.setAttribute('lang', lang);
+            }
+            updateStaticTexts(lang);
+            renderMenuItems(globalMenuData, lang);
+        }
+
+        function toggleAccessibilityModal() {
+            const modal = document.getElementById('accessibilityModal');
+            modal.classList.toggle('open');
+        }
+
+        let currentZoom = 1;
+        function adjustTextSize(direction) {
+            currentZoom += direction * 0.1;
+            if (currentZoom < 0.8) currentZoom = 0.8;
+            if (currentZoom > 1.6) currentZoom = 1.6;
+            document.body.style.fontSize = `${currentZoom}em`;
+        }
+
+        let currentSpacing = 0;
+        function adjustTextSpacing(direction) {
+            currentSpacing += direction * 1;
+            if (currentSpacing < 0) currentSpacing = 0;
+            if (currentSpacing > 10) currentSpacing = 10;
+            document.body.style.letterSpacing = `${currentSpacing}px`;
+        }
+
+        function toggleInvertColors() {
+            document.body.classList.toggle('acc-invert');
+            if (document.body.classList.contains('acc-invert')) {
+                document.body.classList.remove('acc-grayscale');
+            }
+        }
+
+        function toggleGrayscale() {
+            document.body.classList.toggle('acc-grayscale');
+            if (document.body.classList.contains('acc-grayscale')) {
+                document.body.classList.remove('acc-invert');
+            }
+        }
+
+        function toggleUnderlineLinks() {
+            document.body.classList.toggle('acc-underline');
+        }
+
+        function toggleBigCursor() {
+            document.body.classList.toggle('acc-big-cursor');
+        }
+
+        function toggleReadingGuide() {
+            const bar = document.getElementById('reading-guide-bar');
+            if (bar.style.display === 'block') {
+                bar.style.display = 'none';
+                document.removeEventListener('mousemove', moveReadingGuide);
+            } else {
+                bar.style.display = 'block';
+                document.addEventListener('mousemove', moveReadingGuide);
+            }
+        }
+
+        function moveReadingGuide(e) {
+            const bar = document.getElementById('reading-guide-bar');
+            bar.style.top = `${e.clientY}px`;
+        }
+
+        function textToSpeech() {
+            if ('speechSynthesis' in window) {
+                const text = "CAFÉ LÁ LUSH BRASSERIE ASHDOD. חוויה קולינרית עשירה";
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'he-IL';
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert("הדפדפן שלך אינו תומך בהקראת קול.");
+            }
+        }
+
+        function speechToText() {
+            window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if ('SpeechRecognition' in window) {
+                const recognition = new SpeechRecognition();
+                recognition.lang = 'he-IL';
+                recognition.onstart = function() {
+                    alert("המיקרופון פתוח, דבר אל המיקרופון...");
+                };
+                recognition.onresult = function(event) {
+                    const speechToTextResult = event.results[0][0].transcript;
+                    alert("זההנו את מה שאמרת: " + speechToTextResult);
+                };
+                recognition.start();
+            } else {
+                alert("הדפדפן שלך אינו תומך בזיהוי קולי (Speech to Text). מומלץ להשתמש ב-Google Chrome.");
+            }
+        }
+
+        function resetAccessibility() {
+            currentZoom = 1;
+            currentSpacing = 0;
+            document.body.style.fontSize = '';
+            document.body.style.letterSpacing = '';
+            document.body.classList.remove('acc-invert', 'acc-grayscale', 'acc-underline', 'acc-big-cursor');
+            document.getElementById('reading-guide-bar').style.display = 'none';
+            document.removeEventListener('mousemove', moveReadingGuide);
+            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        }
+    </script>
+</body>
+</html>
